@@ -1,20 +1,22 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import './index.css'
-import App from './pages/index'
+import Homepage from './pages/Homepage'
 import reportWebVitals from './reportWebVitals'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import Header from './components/Header'
 import BookingPage from './pages/BookingPage'
+import Layout from './components/layout/Layout'
+import ConfirmedBooking from './pages/ConfirmedBooking'
 
 const router = createBrowserRouter([
 	{
 		path: '/',
-		element: <Header />, // layout route
+		element: <Layout />, // layout route
 
 		children: [
-			{ path: '/', element: <App /> },
+			{ path: '/', element: <Homepage /> },
 			{ path: '/reservation', element: <BookingPage /> },
+			{ path: '/confirmed', element: <ConfirmedBooking /> },
 		],
 	},
 ])

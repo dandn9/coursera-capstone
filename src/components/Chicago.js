@@ -1,6 +1,8 @@
 import React from 'react'
 import CallToAction from './CallToAction'
+import { useNavigate } from 'react-router'
 export default function Chicago() {
+	const navigate = useNavigate()
 	return (
 		<section className='w-full bg-black/10'>
 			<div className='py-6 grid grid-flow-col container mx-auto justify-between'>
@@ -11,7 +13,9 @@ export default function Chicago() {
 						Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
 						eiusmod tempor incididunt ut labore et dolore magna aliqua.
 					</p>
-					<CallToAction>Reserve a table</CallToAction>
+					<CallToAction onClick={() => navigate('/reservation')}>
+						Reserve a table
+					</CallToAction>
 				</div>
 				<div className='max-w-md'>
 					<img src={'/icons/Mario and Adrian A.jpg'} />

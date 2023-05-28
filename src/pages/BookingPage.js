@@ -1,11 +1,14 @@
-import React, { useReducer, useState } from 'react'
+import React, { useReducer } from 'react'
 import BookingForm from '../components/BookingForm'
+import { useNavigate } from 'react-router'
 
 export function updateTimes(state, action) {
-	return state
+	// eslint-disable-next-line no-undef
+	return fetchAPI(action.date)
 }
 export function initalizeTimes() {
-	return []
+	// eslint-disable-next-line no-undef
+	return fetchAPI(new Date())
 }
 
 export default function Reservation() {
@@ -14,9 +17,16 @@ export default function Reservation() {
 		undefined,
 		initalizeTimes
 	)
+	const navigation = useNavigate()
+	function onSubmitHandler(date, time, guests, occasion) {
+		// eslint-disable-next-line no-undef
+		submitAPI({ date, time, guests, occasion })
+		navigation('/confirmed')
+	}
 	return (
 		<BookingForm
 			availableTimes={availableTimes}
+			onSubmit={onSubmitHandler}
 			onChangeAvailableTimes={setAvailableTimes}
 		/>
 	)
