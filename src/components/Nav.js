@@ -1,27 +1,37 @@
 import React from 'react'
+import { NavLink, Outlet } from 'react-router-dom'
+
+function Link({ to, children }) {
+	return (
+		<NavLink
+			to={to}
+			className={({ isActive }) => (isActive ? 'text-mainYellow underline' : '')}>
+			{children}
+		</NavLink>
+	)
+}
 
 export default function Nav() {
 	return (
-		<nav>
-			<img src={'/icons/Logo.svg'} />
-			<ul>
+		<nav className='w-full'>
+			<ul className='grid grid-flow-col justify-stretch items-center text-center grow w-full'>
 				<li>
-					<a href='/'>Home</a>
+					<Link to='/'>Home</Link>
 				</li>
 				<li>
-					<a href='/'>About</a>
+					<Link to='/about'>About</Link>
 				</li>
 				<li>
-					<a href='/'>Menu</a>
+					<Link to='/menu'>Menu</Link>
 				</li>
 				<li>
-					<a href='/'>Reservations</a>
+					<Link to='/reservation'>Reservations</Link>
 				</li>
 				<li>
-					<a href='/'>Order online</a>
+					<Link to='/order'>Order online</Link>
 				</li>
 				<li>
-					<a href='/'>Login</a>
+					<Link to='/login'>Login</Link>
 				</li>
 			</ul>
 		</nav>
