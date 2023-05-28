@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import BookingForm from './components/BookingForm'
 import { initalizeTimes, updateTimes } from './pages/BookingPage'
 
@@ -23,4 +23,22 @@ test('updateTimes Function', () => {
 	const result = updateTimes(state, { date: new Date() })
 
 	expect(result).toMatchObject([1, 2, 3])
+})
+test('has correct guests validation', () => {
+	render(<BookingForm availableTimes={['17:00']} />)
+
+	const guests = screen.getByLabelText('Number of guests')
+	fireEvent.change(guests, { target: { value: 100 } })
+	const submitBtn = screen.getByRole('submit')
+
+	expect(submitBtn).toHaveClass('pointer-events-none') // means its disabled
+})
+test('has correct date validation', () => {
+	render(<BookingForm availableTimes={['17:00']} />)
+
+	const guests = screen.getByLabelText('Choose date')
+	fireEvent.change(guests, { target: { value: '1991-01-01' } })
+	const submitBtn = screen.getByRole('submit')
+
+	expect(submitBtn).toHaveClass('pointer-events-none') // means its disabled
 })

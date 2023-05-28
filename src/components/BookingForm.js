@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { startTransition, useState } from 'react'
 import CallToAction from './CallToAction'
 
 export default function BookingForm({
@@ -10,12 +10,40 @@ export default function BookingForm({
 	const [time, setTime] = useState('')
 	const [guests, setGuests] = useState('')
 	const [occasion, setOccasion] = useState('')
+	const [isValid, setIsValid] = useState(true)
+	const [errorState, setErrorState] = useState({})
 
+	function addError(key, value) {
+		setErrorState((prev) => ({ ...prev, [key]: value }))
+
+		setIsValid(false)
+	}
+	console.log(errorState)
+	function removeError(key) {
+		setErrorState((prev) => {
+			const newState = { ...prev, [key]: undefined }
+			if (Object.values(newState).filter((e) => e).length === 0) setIsValid(true)
+			return newState
+		})
+	}
+	function onChangeGuests(e) {
+		if (+e.target.value > 10 || +e.target.value < 1) {
+			addError('guests', 'Guests can not be more than 10 or less than 1')
+		} else {
+			removeError('guests')
+		}
+		setGuests(e.target.value)
+	}
 	function onChangeData(e) {
-		setDate(e.target.value)
+		const selectedDate = new Date(e.target.value)
 
-		// console.log(new Date(e.target.value))
-		onChangeAvailableTimes({ date: new Date(e.target.value) })
+		if (selectedDate < new Date()) {
+			addError('date', 'Can not reserve a Date from the past')
+		} else {
+			removeError('date')
+			onChangeAvailableTimes({ date: selectedDate })
+		}
+		setDate(e.target.value)
 	}
 
 	return (
@@ -23,7 +51,7 @@ export default function BookingForm({
 			<div className='container mx-auto'>
 				<h1 className=' font-extrabold text-4xl'>Book Now</h1>
 				<form
-					className='mt-4 grid max-w-[200px] gap-5'
+					className='mt-4 grid max-w-[400px] gap-5'
 					onSubmit={(e) => onSubmit(date, time, guests, occasion)}>
 					<label htmlFor='res-date'>Choose date</label>
 					<input
@@ -32,6 +60,9 @@ export default function BookingForm({
 						onChange={onChangeData}
 						value={date}
 					/>
+					{errorState?.date && (
+						<p className='text-red-600'>{errorState?.date}</p>
+					)}
 					<label htmlFor='res-time'>Choose time</label>
 					<select
 						id='res-time'
@@ -50,9 +81,12 @@ export default function BookingForm({
 						min='1'
 						max='10'
 						id='guests'
-						onChange={(e) => setGuests(e.target.value)}
+						onChange={onChangeGuests}
 						value={guests}
 					/>
+					{errorState?.guests && (
+						<p className='text-red-600'>{errorState?.guests}</p>
+					)}
 					<label htmlFor='occasion'>Occasion</label>
 					<select
 						id='occasion'
@@ -61,7 +95,15 @@ export default function BookingForm({
 						<option>Birthday</option>
 						<option>Anniversary</option>
 					</select>
-					<CallToAction type='submit'>Make Your reservation</CallToAction>
+					<CallToAction
+						ariaLabel={'On Click'}
+						type='submit'
+						role='submit'
+						className={
+							isValid ? '' : 'pointer-events-none touch-none bg-gray-500'
+						}>
+						Make Your reservation
+					</CallToAction>
 				</form>
 			</div>
 		</section>
